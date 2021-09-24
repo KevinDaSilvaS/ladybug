@@ -11,4 +11,4 @@ getAllTokensFromProgram [] _ _= []
 getAllTokensFromProgram xs l c = 
     parsedToken:getAllTokensFromProgram remain line col 
     where
-        Right (parsedToken, line, col, remain) = startLexicalAnalysis xs l c
+        (parsedToken, line, col, remain) = startLexicalAnalysis xs l c
