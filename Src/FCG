@@ -1,0 +1,17 @@
+P -> FIORCREV
+F -> fn
+I -> id
+O -> {
+C -> }
+E -> export
+V -> 0..9 | IM
+A -> =
+R -> IAVR | &
+M -> V,M | V.
+
+fn fnc {v = 0} 
+export v
+
+            F  I  O    R    C  R    E     V
+           fn fnc { I A V R }  &  export  v
+                    v = 0 &
