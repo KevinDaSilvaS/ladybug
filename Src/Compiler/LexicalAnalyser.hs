@@ -27,6 +27,8 @@ startLexicalAnalysis ('=':xs) line col = (parsedToken, line, nCol, xs)
         parsedToken = generateToken (AssignToken , "=") line nCol
 startLexicalAnalysis ('f':xs) line col = 
     fnAutomaton xs line col "f"
+startLexicalAnalysis ('e':xs) line col = 
+    exportAutomaton xs line col "e"
 startLexicalAnalysis ('<':xs) line col = 
     openParamsAutomaton xs line nCol "<"
     where
@@ -92,3 +94,24 @@ closeParamsAutomaton ('>':xs) line col ":" = (parsedToken, line, nCol, xs)
         nCol = col + 1
         parsedToken = generateToken (CloseParamsToken, ":>") line nCol
 closeParamsAutomaton xs line col _ = error "closeParamsAutomaton"
+
+exportAutomaton ('x':xs) line col "e"  = exportAutomaton xs line nCol "ex"
+    where
+        nCol = col + 1
+exportAutomaton ('p':xs) line col "ex"  = exportAutomaton xs line nCol "exp"
+    where
+        nCol = col + 1
+exportAutomaton ('o':xs) line col "exp"  = exportAutomaton xs line nCol "expo"
+    where
+        nCol = col + 1
+exportAutomaton ('r':xs) line col "expo"  = exportAutomaton xs line nCol "expor"
+    where
+        nCol = col + 1
+exportAutomaton ('t':xs) line col "expor"  = exportAutomaton xs line nCol "export"
+    where
+        nCol = col + 1
+exportAutomaton (' ':xs) line col "export" = (parsedToken, line, col, ' ':xs)
+    where
+        parsedToken = generateToken (ExportToken, "fn") line col
+exportAutomaton xs line col reading = 
+    identifierAutomaton xs line col reading
