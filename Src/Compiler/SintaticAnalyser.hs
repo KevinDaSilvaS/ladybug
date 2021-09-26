@@ -16,7 +16,8 @@ startSintaticAnalysis program line col exports params
     | token' == IdentifierToken = 
         parsedToken:_assign remain nline ncol exports params
     | token' == ExportToken = 
-        parsedToken:_value remain nline ncol (exports-1) params startSintaticAnalysis
+        parsedToken:
+        _value remain nline ncol (exports-1) params startSintaticAnalysis
     where
         token = startLexicalAnalysis program line col 
         (rawToken, parsedToken, nline, ncol, remain) = extractTokenInfo token
@@ -63,10 +64,41 @@ _assign program line col exports params
         (rawToken, parsedToken, nline, ncol, remain) = extractTokenInfo token
         (token', value') = rawToken
 
+_fnCall program line col exports params
+    | token' == IdentifierToken =
+        parsedToken:_fnCallParamsStart remain nline ncol exports params
+    | otherwise = error $ show rawToken
+    where
+        token = startLexicalAnalysis program line col 
+        (rawToken, parsedToken, nline, ncol, remain) = extractTokenInfo token
+        (token', value') = rawToken
+
+_fnCallParamsStart program line col exports params
+    | token' == EndParamsToken =
+        parsedToken:_fnCallParams remain nline ncol exports params
+    | otherwise = error $ show rawToken
+    where
+        token = startLexicalAnalysis program line col 
+        (rawToken, parsedToken, nline, ncol, remain) = extractTokenInfo token
+        (token', value') = rawToken
+
+_fnCallParams program line col exports params 
+    | token' == IntegerToken || token' == IdentifierToken =
+        parsedToken:_fnCallParams remain nline ncol exports params
+    | token' == EndParamsToken =
+        parsedToken:startSintaticAnalysis remain nline ncol exports params
+    | otherwise = error $ show rawToken
+    where
+        token = startLexicalAnalysis program line col 
+        (rawToken, parsedToken, nline, ncol, remain) = extractTokenInfo token
+        (token', value') = rawToken
+
 _value program line col exports params fn
     | token' == IntegerToken || token' == IdentifierToken =
         parsedToken:fn remain nline ncol exports params
-    | otherwise = error ("_value " ++ show token)
+    | token' == EndParamsToken =
+        parsedToken:_fnCall remain nline ncol exports params
+    | otherwise = error ("_value " ++ show token ++ " <-- " ++ show program)
     where
         token = startLexicalAnalysis program line col 
         (rawToken, parsedToken, nline, ncol, remain) = extractTokenInfo token

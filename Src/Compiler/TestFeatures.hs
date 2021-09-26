@@ -15,5 +15,5 @@ getAllTokensFromProgram xs l c =
         (parsedToken, line, col, remain) = startLexicalAnalysis xs l c
 
 sintaticAnalysis = do
-    let program = "r = 22 fn fnc <: _v=0 v1=12 :> v = 90 export 90"
+    let program = "r = 22 fn fnc <: _v=0 v1=12 :> v = 90 export 90 i = . fnc . 20 40 20 ."
     startSintaticAnalysis program 1 0 0 0

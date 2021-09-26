@@ -8,6 +8,8 @@ V -> 0..9 | IM
 A -> =
 R -> IAVR | &
 M -> V,M | V.
+_FN -> . I . V'
+V' -> 0-9.V'| 0-9.
 
 fn fnc {v = 0} 
 export v
@@ -15,3 +17,5 @@ export v
             F  I  O    R    C  R    E     V
            fn fnc { I A V R }  &  export  v
                     v = 0 &
+
+g = . fnc . 30 30 .
