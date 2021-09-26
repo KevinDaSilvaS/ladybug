@@ -2,11 +2,7 @@ module Lang.Src.Compiler.SintaticAnalyser where
 
 import Lang.Src.Compiler.LexicalAnalyser
 import Lang.Src.Compiler.Tokens
-
-extractTokenInfo (parsedToken, line, col, remain) = 
-    (rawToken, parsedToken, line, col, remain)
-    where
-        rawToken = token parsedToken
+import Lang.Src.Compiler.ExtractToken ( extractTokenInfo )
 
 startSintaticAnalysis [] line col 0 0 = [] 
 startSintaticAnalysis program line col exports params 
